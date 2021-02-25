@@ -1,10 +1,18 @@
 package com.marcomnrq.consultation.domain.model;
 
-import java.util.List;
+import lombok.Data;
 
-public class Plan {
+import javax.persistence.*;
+
+@Data
+@Entity
+@Table(name = "plans")
+public class Plan extends AuditModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
     private Double price;
-    private List<PlanPricing> pricingList;
 }

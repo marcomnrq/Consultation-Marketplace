@@ -102,6 +102,7 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
+        <!-- Tools for depuring -->
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

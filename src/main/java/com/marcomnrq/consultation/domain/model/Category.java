@@ -8,10 +8,14 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private Boolean active;
+
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
@@ -19,4 +23,5 @@ public class Category {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Category> subCategories;
+
 }
