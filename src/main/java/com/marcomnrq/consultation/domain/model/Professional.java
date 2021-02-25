@@ -1,6 +1,7 @@
 package com.marcomnrq.consultation.domain.model;
 
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,9 +18,11 @@ public class Professional {
     @JoinColumn(name = "user", updatable = false, nullable = false)
     private User user;
 
+    @NaturalId
     private String shortName;
 
     private String profileName;
 
     private String description;
+
 }

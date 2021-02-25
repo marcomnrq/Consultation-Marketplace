@@ -40,4 +40,10 @@ public class User {
     private Plan plan;
 
     private Boolean isProfessional;
+
+    private Boolean using2FA;
+
+    private String secretKey;
+
+    private Boolean enabled;
 }

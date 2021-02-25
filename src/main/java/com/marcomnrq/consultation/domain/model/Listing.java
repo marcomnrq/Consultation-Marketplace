@@ -19,6 +19,8 @@ public class Listing extends AuditModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    private Boolean visible;
+
     private String title;
 
     private String description;
@@ -26,6 +28,8 @@ public class Listing extends AuditModel {
     private Boolean featured;
 
     private Double rating;
+
+    private Integer ratingsCount;
 
     private Currency currency;
 
