@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -29,9 +30,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
-    public AuthenticationResource refreshToken(@Valid @RequestBody RefreshTokenResource refreshTokenRequest, Principal principal){
-        String email = principal.getName();
-        refreshTokenRequest.setEmail(email);
+    public AuthenticationResource refreshToken(@Valid @RequestBody RefreshTokenResource refreshTokenRequest){
+        //String email = principal.getName();
+        //refreshTokenRequest.setEmail(email);
+
         return authenticationService.refreshToken(refreshTokenRequest);
     }
 

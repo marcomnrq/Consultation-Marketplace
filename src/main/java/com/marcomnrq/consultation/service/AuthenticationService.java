@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -42,8 +40,13 @@ public class AuthenticationService {
 
     private final JwtProvider jwtProvider;
 
+    private final PlanRepository planRepository;
+
     @Transactional
     public void signUp(SignUpResource signUpResource) {
+        Plan plan = new Plan();
+        plan.setName("PLAN_FREE");
+        planRepository.save(plan);
         // Creating a new user based of registration dto
         User user = new User();
         user.setEmail(signUpResource.getEmail());
@@ -51,8 +54,9 @@ public class AuthenticationService {
         user.setLastName(signUpResource.getLastName());
         user.setPassword(passwordEncoder.encode(signUpResource.getPassword()));
         user.setGender(Gender.OTHER);
+        user.setPlan(plan);
         user.setUsing2FA(false);
-        user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new CustomException("Role user not found"))));
         user.setEnabled(false);
 
@@ -91,7 +95,7 @@ public class AuthenticationService {
         // Refresh the token
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
         String token = jwtProvider.generateTokenWithEmail(refreshTokenRequest.getEmail());
-
+        //TODO: validate user email with the refresh token
         return new AuthenticationResource(
                 token,
                 refreshTokenRequest.getRefreshToken(),

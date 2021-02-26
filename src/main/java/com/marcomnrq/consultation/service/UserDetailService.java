@@ -26,8 +26,14 @@ public class UserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new CustomException("User not found with username"));
 
         return new
-                org.springframework.security
-                        .core.userdetails.User(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, getAuthorities(user));
+                org.springframework.security.core.userdetails.User(
+                        user.getEmail(),
+                        user.getPassword(),
+                        user.getEnabled(),
+                true,
+                true,
+                true,
+                getAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {

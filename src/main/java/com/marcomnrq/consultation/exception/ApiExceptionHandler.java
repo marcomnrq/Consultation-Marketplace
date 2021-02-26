@@ -15,13 +15,13 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleException(CustomException customException){
         // Creating a payload with the errors
         ExceptionResource exceptionResource = new ExceptionResource(
-                HttpStatus.BAD_REQUEST,
-                HttpStatus.BAD_REQUEST.value(),
+                customException.getHttpStatus(),
+                customException.getHttpStatus().value(),
                 customException.getErrorCode(),
                 customException.getMessage(),
                 ZonedDateTime.now(ZoneId.of("Z")));
         // Returning the response entity
-        return new ResponseEntity<>(exceptionResource, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionResource, customException.getHttpStatus());
     }
 
 }

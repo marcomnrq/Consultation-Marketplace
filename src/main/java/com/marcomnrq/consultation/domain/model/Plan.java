@@ -14,5 +14,4 @@ public class Plan extends AuditModel {
 
     private String name;
 
-    private Double price;
 }

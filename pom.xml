@@ -129,6 +129,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Amazon AWS -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.961</version>
+        </dependency>
         <!-- MercadoPago SDK -->
         <dependency>
             <groupId>com.mercadopago</groupId>

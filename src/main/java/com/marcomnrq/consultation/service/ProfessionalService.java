@@ -23,7 +23,7 @@ public class ProfessionalService {
 
     private final RoleRepository roleRepository;
 
-    public Professional createProfessional(String email, SaveProfessionalResource professionalResource){
+    public Professional createProfessionalProfile(String email, SaveProfessionalResource professionalResource){
         // User upgrades to a professional account
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new CustomException(1000, "Invalid username, no user match with email value"));
@@ -39,17 +39,20 @@ public class ProfessionalService {
         professional.setShortName(professional.getShortName());
         professional.setProfileName(professional.getProfileName());
         professional.setDescription(professional.getDescription());
+        /*
         Role professionalRole = roleRepository.findByName("ROLE_PROFESSIONAL")
                 .orElseThrow(()->new CustomException(1003, "Something went wrong, professional role not found"));;
         if (!user.getRoles().contains(professionalRole)){
             user.getRoles().add(professionalRole);
         }
+
+         */
         user.setIsProfessional(true);
         userRepository.save(user);
         return professionalRepository.save(professional);
     }
 
-    public Professional editProfile(String email, SaveProfessionalResource professionalResource){
+    public Professional editProfessionalProfile(String email, SaveProfessionalResource professionalResource){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()->new CustomException(1000, "Invalid username, no user match with email value"));
         Professional professional = professionalRepository.findByUser(user)
@@ -66,11 +69,11 @@ public class ProfessionalService {
         return professionalRepository.save(professional);
     }
 
-    public Professional getByShortName(String shortName){
+    public Professional getProfessionalByShortName(String shortName){
         return professionalRepository.findByShortName(shortName).orElseThrow(()->new CustomException(1001, "Invalid short name, no profile found"));
     }
 
-    public Page<Professional> getAll(Pageable pageable){
+    public Page<Professional> getAllProfessionals(Pageable pageable){
         return professionalRepository.findAll(pageable);
     }
 
