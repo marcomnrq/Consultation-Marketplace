@@ -9,6 +9,7 @@ import com.marcomnrq.consultation.resource.SaveProfessionalResource;
 import com.marcomnrq.consultation.service.ListingService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,8 @@ public class ListingController {
 
     private final ModelMapper modelMapper;
 
+    private final PrettyTime prettyTime;
+
     @PostMapping("listings")
     public ListingResource createListing(@RequestBody SaveListingResource resource, Principal principal){
         return convertToResource(listingService.createListing(principal.getName(), resource));
@@ -44,7 +47,10 @@ public class ListingController {
     }
 
     private ListingResource convertToResource(Listing entity) {
-        return modelMapper.map(entity, ListingResource.class);
+        ListingResource listing = modelMapper.map(entity, ListingResource.class);
+        listing.setCreated(prettyTime.format(listing.getCreatedAt()));
+        listing.setUpdated(prettyTime.format(listing.getUpdatedAt()));
+        return listing;
     }
 
 }

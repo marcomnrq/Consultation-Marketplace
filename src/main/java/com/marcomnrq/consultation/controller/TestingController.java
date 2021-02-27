@@ -1,7 +1,9 @@
 package com.marcomnrq.consultation.controller;
 
+import com.marcomnrq.consultation.domain.model.Plan;
 import com.marcomnrq.consultation.domain.model.Role;
 import com.marcomnrq.consultation.domain.model.User;
+import com.marcomnrq.consultation.domain.repository.PlanRepository;
 import com.marcomnrq.consultation.domain.repository.RoleRepository;
 import com.marcomnrq.consultation.domain.repository.UserRepository;
 import com.marcomnrq.consultation.exception.CustomException;
@@ -26,6 +28,8 @@ public class TestingController {
 
     private final RoleRepository roleRepository;
 
+    private final PlanRepository planRepository;
+
     @GetMapping()
     public ResponseEntity<?> testingGetRequest(){
         throw new CustomException(1001, "Invalid message");
@@ -33,13 +37,32 @@ public class TestingController {
 
     @PostMapping()
     public ResponseEntity<?> testingFunction() {
-        User user = userRepository.findByEmail("manriqueacham@gmail.com")
-                .orElseThrow(()->new CustomException("error retrieving user"));
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(roleRepository.findByName("ROLE_USER")
-                .orElseThrow(()->new CustomException("error retrieving role")));
-        user.setRoles(roleList);
-        userRepository.save(user);
+        // Users
+        userRepository.deleteAll();
+
+        // Plans
+        planRepository.deleteAll();
+        Plan plan = new Plan();
+        plan.setName("PLAN_FREE");
+        planRepository.save(plan);
+        plan = new Plan();
+        plan.setName("PLAN_PREMIUM");
+        planRepository.save(plan);
+        plan = new Plan();
+        plan.setName("PLAN_BUSINESS");
+        planRepository.save(plan);
+
+        // Role
+        roleRepository.deleteAll();
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        roleRepository.save(role);
+        role = new Role();
+        role.setName("ROLE_PROFESSIONAL");
+        roleRepository.save(role);
+        role = new Role();
+        role.setName("ROLE_ADMINISTRATOR");
+        roleRepository.save(role);
         return ResponseEntity.ok().build();
     }
 }

@@ -42,6 +42,7 @@ public class ListingService {
         listing.setRating(0.00);
         listing.setRatingsCount(0);
         listing.setCurrency(Currency.PEN);
+        listing.setPrice(listingResource.getPrice());
         listing.setCategory(category);
         return listingRepository.save(listing);
     }

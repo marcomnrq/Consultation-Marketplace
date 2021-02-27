@@ -10,10 +10,6 @@ import java.util.Locale;
 
 @Data
 public class ListingResource extends AuditModel {
-
-    @JsonIgnore
-    private final PrettyTime p = new PrettyTime().setLocale(new Locale("ES"));
-
     private Long id;
     private UserResource user;
     private Boolean visible;
@@ -25,8 +21,6 @@ public class ListingResource extends AuditModel {
     private Currency currency;
     private Double price;
     private CategoryResource category;
-
-    public String created = p.format(getCreatedAt());
-    public String updated = p.format(getUpdatedAt());
-
+    private String created;
+    private String updated;
 }

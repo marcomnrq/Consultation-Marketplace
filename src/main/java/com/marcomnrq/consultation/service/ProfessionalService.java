@@ -39,14 +39,13 @@ public class ProfessionalService {
         professional.setShortName(professional.getShortName());
         professional.setProfileName(professional.getProfileName());
         professional.setDescription(professional.getDescription());
-        /*
+
         Role professionalRole = roleRepository.findByName("ROLE_PROFESSIONAL")
                 .orElseThrow(()->new CustomException(1003, "Something went wrong, professional role not found"));;
         if (!user.getRoles().contains(professionalRole)){
             user.getRoles().add(professionalRole);
         }
 
-         */
         user.setIsProfessional(true);
         userRepository.save(user);
         return professionalRepository.save(professional);

@@ -20,6 +20,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
@@ -44,9 +45,6 @@ public class AuthenticationService {
 
     @Transactional
     public void signUp(SignUpResource signUpResource) {
-        Plan plan = new Plan();
-        plan.setName("PLAN_FREE");
-        planRepository.save(plan);
         // Creating a new user based of registration dto
         User user = new User();
         user.setEmail(signUpResource.getEmail());
@@ -54,10 +52,12 @@ public class AuthenticationService {
         user.setLastName(signUpResource.getLastName());
         user.setPassword(passwordEncoder.encode(signUpResource.getPassword()));
         user.setGender(Gender.OTHER);
-        user.setPlan(plan);
+        user.setPlan(planRepository.findByName("PLAN_FREE")
+                .orElseThrow(() -> new CustomException("Role user not found")));
         user.setUsing2FA(false);
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new CustomException("Role user not found"))));
+        user.setIsProfessional(false);
         user.setEnabled(false);
 
         // Saving the new user to the database
@@ -69,7 +69,7 @@ public class AuthenticationService {
         notificationEmail.setRecipient(user.getEmail());
         notificationEmail.setSubject("Account activation");
         notificationEmail.setBody("Some text here + " + token);
-        mailService.sendMail(new NotificationEmail());
+        mailService.sendMail(notificationEmail);
     }
 
     public AuthenticationResource signIn(SignInResource loginRequest) {

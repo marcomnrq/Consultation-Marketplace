@@ -18,11 +18,18 @@ public class CategoryService {
 
     public Category createCategory(SaveCategoryResource resource){
         Category category = new Category();
-        Category parent = categoryRepository.findById(resource.getParentId())
-                .orElseThrow(()->new CustomException("Invalid parent"));
-        category.setActive(resource.getActive());
-        category.setName(resource.getName());
-        category.setParent(parent);
+        if(resource.getParentId() == null){
+            // Create parent category
+            category.setActive(resource.getActive());
+            category.setName(resource.getName());
+            category.setParent(null);
+        } else{
+            Category parent = categoryRepository.findById(resource.getParentId())
+                    .orElseThrow(()->new CustomException("Invalid parent"));
+            category.setActive(resource.getActive());
+            category.setName(resource.getName());
+            category.setParent(parent);
+        }
         return categoryRepository.save(category);
     }
     public Category editCategory(Integer id, SaveCategoryResource resource){
