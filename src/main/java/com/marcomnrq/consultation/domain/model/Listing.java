@@ -35,6 +35,8 @@ public class Listing extends AuditModel {
 
     private Double price;
 
+    private String friendlyUrl;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

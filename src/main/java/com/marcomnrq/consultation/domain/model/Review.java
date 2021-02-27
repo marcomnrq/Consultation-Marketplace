@@ -14,7 +14,7 @@ public class Review extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double rating;
+    private Integer rating;
 
     private String content;
 

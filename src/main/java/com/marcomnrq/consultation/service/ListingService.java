@@ -44,6 +44,7 @@ public class ListingService {
         listing.setCurrency(Currency.PEN);
         listing.setPrice(listingResource.getPrice());
         listing.setCategory(category);
+        listing.setFriendlyUrl(listing.getId().toString()+"-"+listing.getTitle().toLowerCase().replaceAll(" ", "-"));
         return listingRepository.save(listing);
     }
 

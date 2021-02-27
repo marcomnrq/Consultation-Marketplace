@@ -18,6 +18,7 @@ public class ListingResource extends AuditModel {
     private Boolean featured;
     private Double rating;
     private Integer ratingsCount;
+    private String friendlyUrl;
     private Currency currency;
     private Double price;
     private CategoryResource category;
