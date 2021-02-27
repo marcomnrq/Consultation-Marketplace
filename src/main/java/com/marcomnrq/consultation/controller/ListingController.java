@@ -13,6 +13,7 @@ import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -42,12 +43,28 @@ public class ListingController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @GetMapping("listings/{id}")
+    public ListingResource getListingById(@PathVariable(name = "id") Long id){
+        return convertToResource(listingService.getListingById(id));
+    }
+
+    @PutMapping("listings/{id}")
+    public ListingResource editListingById(@PathVariable(name = "id") Long id, @RequestBody SaveListingResource resource, Principal principal){
+        return convertToResource(listingService.editListing(principal.getName(), id, resource));
+    }
+
+    @DeleteMapping("listings/{id}")
+    public ResponseEntity<?> deleteListingById(@PathVariable(name = "id") Long id, Principal principal){
+        return listingService.deleteListing(principal.getName(), id);
+    }
+
+
     private Listing convertToEntity(SaveListingResource resource) {
         return modelMapper.map(resource, Listing.class);
     }
 
     private ListingResource convertToResource(Listing entity) {
-        ListingResource listing = modelMapper.map(entity, ListingResource.class);
+        ListingResource listing = (modelMapper.map(entity, ListingResource.class));
         listing.setCreated(prettyTime.format(listing.getCreatedAt()));
         listing.setUpdated(prettyTime.format(listing.getUpdatedAt()));
         return listing;

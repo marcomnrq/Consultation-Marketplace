@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -40,6 +41,8 @@ public class User {
     private Plan plan;
 
     private String profileImgLink;
+
+    private LocalDate dateOfBirth;
 
     private Boolean isProfessional;
 

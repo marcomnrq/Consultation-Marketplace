@@ -41,7 +41,6 @@ public class MailService {
         try {
             mailSender.send(message);
         } catch (MailException exception){
-            System.out.println(exception);
             throw new CustomException("Exception occurred when sending email", exception);
         }
 

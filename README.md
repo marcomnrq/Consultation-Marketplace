@@ -11,10 +11,17 @@ is the 'main' branch of this repository.
 
 ## Authentication & Authorization
 Authentication has been implemented with Spring Security using JWT. The expiration time for
-every token is 90 seconds, you can refresh your token with the endpoint: ".../api/v1/authen
-tication/refresh-token". Authorization is handled with user roles, which can be user,
-professional or admin. Lastly, is worth to mention that users can enable 2FA on their accounts
-and add an extra layer of security.
+every token is 90 seconds, you can refresh your token with the endpoint: 
+".../api/v1/authentication/refresh-token". Authorization is handled with user roles, which can be 
+role_user, role_professional or role_admin. Lastly, is worth to mention that users can enable
+2FA on their accounts and add an extra layer of security.
+
+## Security Measures
+Currently, there are security protections against these threats:
+1. SQL or code Injection
+2. Cross-site request forgery (CSRF)
+3. Cross-site scripting (XSS)
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

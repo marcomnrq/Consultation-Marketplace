@@ -25,14 +25,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
+        // TODO: enable CSRF for same origin policy
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
