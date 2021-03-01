@@ -28,7 +28,8 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        sentinelService.bruteForceCheck(getClientIP());
+        sentinelService.bruteForceCheck(request);
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException("User not found with username"));
 
@@ -52,11 +53,4 @@ public class UserDetailService implements UserDetailsService {
         return authorities;
     }
 
-    private String getClientIP() {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null){
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
-    }
 }

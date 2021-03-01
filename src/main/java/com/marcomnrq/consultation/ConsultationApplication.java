@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import ua_parser.Parser;
 
 import java.util.Locale;
 
@@ -28,5 +29,8 @@ public class ConsultationApplication {
     public PrettyTime prettyTime() {
         return new PrettyTime(new Locale("ES"));
     }
+
+    @Bean
+    public Parser parser(){ return new Parser(); }
 
 }

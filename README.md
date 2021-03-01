@@ -17,14 +17,17 @@ role_user, role_professional or role_admin. Lastly, is worth to mention that use
 2FA on their accounts and add an extra layer of security.
 
 ## Security Measures and Sentinel
-Sentinel keeps your users safe. Sentinel Service currently detects brute force attempts, suspicious 
+**Sentinel keeps your users safe**. Sentinel Service currently detects brute force attempts, suspicious 
 authentication and checks captcha validation. More features are coming soon. 
-Along with Sentinel here is a complete list of security protections:
+Along with Sentinel here is a complete list of tests regarding security:
 1. SQL or code Injection
 2. Cross-site request forgery (CSRF)
 3. Cross-site scripting (XSS)
-4. Brute force detection
+4. Brute force attempts
 5. Suspicious authentication
+6. Device notification
+7. Encryption of passwords
+8. Swagger disabled on production
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

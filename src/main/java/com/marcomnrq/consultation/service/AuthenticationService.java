@@ -13,7 +13,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.*;
 
@@ -42,6 +45,8 @@ public class AuthenticationService {
     private final JwtProvider jwtProvider;
 
     private final PlanRepository planRepository;
+
+    private final SentinelService sentinelService;
 
     @Transactional
     public void signUp(SignUpResource signUpResource) {
@@ -77,22 +82,18 @@ public class AuthenticationService {
     }
 
     public AuthenticationResource signIn(SignInResource loginRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(()->new CustomException("Invalid user"));
-        if(user.getUsing2FA()){
-            return new AuthenticationResource("","",null,"", true);
-        }else {
-            //
-            SecurityContextHolder.getContext().setAuthentication(authenticate);
-            String token = jwtProvider.generateToken(authenticate);
-            return new AuthenticationResource(
-                    token,
-                    refreshTokenService.generateRefreshToken().getToken(),
-                    Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
-                    loginRequest.getEmail(),
-                    false);
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        sentinelService.verifyDevice(authentication, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+        // Returning
+        String token = jwtProvider.generateToken(authentication);
+        return new AuthenticationResource(
+                token,
+                refreshTokenService.generateRefreshToken().getToken(),
+                Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
+                loginRequest.getEmail(),
+                false);
     }
 
     public AuthenticationResource refreshToken(RefreshTokenResource refreshTokenRequest){

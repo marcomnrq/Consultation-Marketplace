@@ -108,6 +108,17 @@
             <artifactId>modelmapper-spring</artifactId>
             <version>2.3.9</version>
         </dependency>
+        <!-- Geolocation IP and Parser -->
+        <dependency>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ua-parser</groupId>
+            <artifactId>uap-java</artifactId>
+            <version>1.5.1</version>
+        </dependency>
         <!-- Thymeleaf Templates -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
