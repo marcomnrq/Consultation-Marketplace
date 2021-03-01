@@ -72,6 +72,10 @@ public class ProfessionalService {
         return professionalRepository.findByShortName(shortName).orElseThrow(()->new CustomException(1001, "Invalid short name, no profile found"));
     }
 
+    public Professional getProfessionalById(Long id){
+        return professionalRepository.findById(id).orElseThrow(()->new CustomException(1001, "Invalid id, no profile found"));
+    }
+
     public Page<Professional> getAllProfessionals(Pageable pageable){
         return professionalRepository.findAll(pageable);
     }

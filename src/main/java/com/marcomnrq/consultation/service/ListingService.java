@@ -46,7 +46,7 @@ public class ListingService {
         listing.setCurrency(Currency.PEN);
         listing.setPrice(listingResource.getPrice());
         listing.setCategory(category);
-        listing.setFriendlyUrl(listing.getId().toString()+"-"+listing.getTitle().toLowerCase().replaceAll(" ", "-"));
+        listing.setFriendlyUrl(listing.getId()+"-"+listing.getTitle().toLowerCase().replaceAll(" ", "-"));
         return listingRepository.save(listing);
     }
 
@@ -57,6 +57,10 @@ public class ListingService {
 
     public Page<Listing> findAll(Pageable pageable){
         return listingRepository.findAll(pageable);
+    }
+
+    public Page<Listing> searchListing(String title, Pageable pageable){
+        return listingRepository.findByTitleLike(title, pageable);
     }
 
     public Listing editListing(String email, Long listingId, SaveListingResource resource){

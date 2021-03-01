@@ -39,6 +39,12 @@ public class CustomException extends RuntimeException {
         this.httpStatus = status;
     }
 
+    public CustomException(String message, HttpStatus status){
+        super(message);
+        this.errorCode = 999;
+        this.httpStatus = status;
+    }
+
     // throw new CustomException(1003, "User not found", HttpStatus.HttpStatus.NOT_FOUND);
 
 

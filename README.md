@@ -16,12 +16,15 @@ every token is 90 seconds, you can refresh your token with the endpoint:
 role_user, role_professional or role_admin. Lastly, is worth to mention that users can enable
 2FA on their accounts and add an extra layer of security.
 
-## Security Measures
-Currently, there are security protections against these threats:
+## Security Measures and Sentinel
+Sentinel keeps your users safe. Sentinel Service currently detects brute force attempts, suspicious 
+authentication and checks captcha validation. More features are coming soon. 
+Along with Sentinel here is a complete list of security protections:
 1. SQL or code Injection
 2. Cross-site request forgery (CSRF)
 3. Cross-site scripting (XSS)
-
+4. Brute force detection
+5. Suspicious authentication
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

@@ -36,14 +36,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // TODO: enable CSRF for same origin policy
         httpSecurity
                 .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/**")
-                    .permitAll()
+                    .authorizeRequests()
+                        .antMatchers("/**")
+                        .permitAll()
+                        .antMatchers("/api/v1/authentication/**")
+                        .permitAll()
+                    .anyRequest()
+                    .authenticated();
+                /*
+                .and()
+                    .oauth2ResourceServer()
+                    .jwt()
 
-                    .antMatchers("/api/v1/authentication/**")
-                    .permitAll()
-                .anyRequest()
-                .authenticated();
+                 */
+
         httpSecurity.addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class);
     }

@@ -45,6 +45,7 @@ public class AuthenticationService {
 
     @Transactional
     public void signUp(SignUpResource signUpResource) {
+
         // Creating a new user based of registration dto
         User user = new User();
         user.setEmail(signUpResource.getEmail());
@@ -53,7 +54,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(signUpResource.getPassword()));
         user.setGender(Gender.OTHER);
         user.setPlan(planRepository.findByName("PLAN_FREE")
-                .orElseThrow(() -> new CustomException("Role user not found")));
+                .orElseThrow(() -> new CustomException("Plan not found")));
         user.setUsing2FA(false);
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new CustomException("Role user not found"))));
@@ -67,8 +68,11 @@ public class AuthenticationService {
         String token = generateVerificationToken(user);
         NotificationEmail notificationEmail = new NotificationEmail();
         notificationEmail.setRecipient(user.getEmail());
-        notificationEmail.setSubject("Account activation");
-        notificationEmail.setBody("Some text here + " + token);
+        notificationEmail.setSubject("Activación de cuenta");
+        notificationEmail.setFullName(user.getFirstName());
+        notificationEmail.setButtonLink("https://google.com");
+        notificationEmail.setButtonText("Activa tu cuenta");
+        notificationEmail.setBody("Gracias por registrarte, tu link de activación usa el siguiente token: " + token);
         mailService.sendMail(notificationEmail);
     }
 

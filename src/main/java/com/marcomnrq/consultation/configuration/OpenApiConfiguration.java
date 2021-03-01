@@ -12,7 +12,7 @@ public class OpenApiConfiguration {
     public OpenAPI consultationOpenApi() {
         return new OpenAPI().info(
                 new Info()
-                        .title("Consultation Marketplace Application API")
+                        .title("Consultation Marketplace API")
                         .description("Consultation Marketplace API implemented with Spring Boot RESTful service and documented using springdoc-openapi and OpenAPI 3.0")
                         .version("1.0")
                         .contact(

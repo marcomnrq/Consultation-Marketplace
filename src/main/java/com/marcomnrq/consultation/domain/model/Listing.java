@@ -31,6 +31,7 @@ public class Listing extends AuditModel {
 
     private Integer ratingsCount;
 
+    @Enumerated(EnumType.STRING)
     private Currency currency;
 
     private Double price;

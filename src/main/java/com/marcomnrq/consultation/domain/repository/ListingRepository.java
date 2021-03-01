@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ListingRepository extends JpaRepository<Listing, Long> {
-    Page<Listing> findAllByTitleLike(String title, Pageable pageable);
+    Page<Listing> findByTitleLike(String title, Pageable pageable);
+    Page<Listing> findAllByTitleIsWithin(String title, Pageable pageable);
 }

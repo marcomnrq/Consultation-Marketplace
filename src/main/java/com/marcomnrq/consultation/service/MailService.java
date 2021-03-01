@@ -20,9 +20,12 @@ public class MailService {
 
     private final JavaMailSender mailSender;
 
-    public String buildMail(String message) {
+    public String buildMail(NotificationEmail notificationEmail) {
         Context context = new Context();
-        context.setVariable("message", message);
+        context.setVariable("user", "¡Hola " + notificationEmail.getFullName() + "!");
+        context.setVariable("message", notificationEmail.getBody());
+        context.setVariable("buttonLink", notificationEmail.getButtonLink());
+        context.setVariable("buttonText", notificationEmail.getButtonText());
         return templateEngine.process("email-template", context);
     }
 
@@ -35,7 +38,7 @@ public class MailService {
             messageHelper.setFrom("no-reply@testingmail.com");
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
-            messageHelper.setText(buildMail(notificationEmail.getBody()));
+            messageHelper.setText(buildMail(notificationEmail));
         };
 
         try {

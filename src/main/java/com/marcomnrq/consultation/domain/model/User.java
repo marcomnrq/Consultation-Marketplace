@@ -8,11 +8,12 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,4 +52,8 @@ public class User {
     private String secretKey;
 
     private Boolean enabled;
+
+    public Optional<String> getUserProfileImageLink() {
+        return Optional.ofNullable(profileImgLink);
+    }
 }

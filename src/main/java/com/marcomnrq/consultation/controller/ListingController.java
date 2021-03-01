@@ -43,6 +43,14 @@ public class ListingController {
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @GetMapping("listings/search")
+    public Page<ListingResource> searchListings(@RequestParam String title, Pageable pageable){
+        // TODO: improve searching for listings
+        Page<Listing> listings = listingService.searchListing(title, pageable);
+        List<ListingResource> resources = listings.getContent().stream().map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
     @GetMapping("listings/{id}")
     public ListingResource getListingById(@PathVariable(name = "id") Long id){
         return convertToResource(listingService.getListingById(id));

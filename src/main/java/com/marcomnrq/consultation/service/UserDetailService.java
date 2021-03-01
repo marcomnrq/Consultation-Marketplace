@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,8 +22,13 @@ public class UserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final HttpServletRequest request;
+
+    private final SentinelService sentinelService;
+
     @Override
     public UserDetails loadUserByUsername(String email) {
+        sentinelService.bruteForceCheck(getClientIP());
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException("User not found with username"));
 
@@ -44,5 +50,13 @@ public class UserDetailService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
+    }
+
+    private String getClientIP() {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null){
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }
