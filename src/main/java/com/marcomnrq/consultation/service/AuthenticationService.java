@@ -82,18 +82,49 @@ public class AuthenticationService {
     }
 
     public AuthenticationResource signIn(SignInResource loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        sentinelService.verifyDevice(authentication, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
-        // Returning
-        String token = jwtProvider.generateToken(authentication);
-        return new AuthenticationResource(
-                token,
-                refreshTokenService.generateRefreshToken().getToken(),
-                Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
-                loginRequest.getEmail(),
-                false);
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()->new CustomException("User not found"));
+        if(!user.getUsing2FA()) {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            sentinelService.verifyDevice(authentication, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+            // Returning
+            String token = jwtProvider.generateToken(authentication);
+            return new AuthenticationResource(
+                    token,
+                    refreshTokenService.generateRefreshToken().getToken(),
+                    Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
+                    loginRequest.getEmail(),
+                    false);
+        }else{
+            // User is using two factor authentication
+            throw new CustomException("User has 2FA enabled");
+        }
+    }
+
+    public AuthenticationResource signInWithTotp(TotpSignInResource loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()->new CustomException("User not found"));
+        if(user.getUsing2FA()) {
+            if(totpService.verifyCode(loginRequest.getTotp(), user.getSecretKey())) {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                sentinelService.verifyDevice(authentication, ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest());
+                // Returning
+                String token = jwtProvider.generateToken(authentication);
+                return new AuthenticationResource(
+                        token,
+                        refreshTokenService.generateRefreshToken().getToken(),
+                        Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()),
+                        loginRequest.getEmail(),
+                        true);
+            } else{
+                throw new CustomException("2FA code is not valid");
+            }
+        }else{
+            // User is using two factor authentication
+            throw new CustomException("User does not have 2FA enabled");
+        }
     }
 
     public AuthenticationResource refreshToken(RefreshTokenResource refreshTokenRequest){
@@ -173,15 +204,18 @@ public class AuthenticationService {
 
     }
 
-    public void enable2fa(String email) {
+    public String enable2fa(String email) {
         // Validating user
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(!optionalUser.isEmpty()){
             User user = optionalUser.get();
             if(!user.getUsing2FA()){
                 // Generate Secret Key
-                user.setSecretKey(totpService.generateSecret());
+                String secret =totpService.generateSecret();
+                user.setSecretKey(secret);
                 user.setUsing2FA(true);
+                userRepository.save(user);
+                return totpService.getUriForImage(secret, user.getEmail());
             }else{
                 throw new CustomException("2FA has already been enabled");
             }
@@ -190,7 +224,7 @@ public class AuthenticationService {
         }
     }
 
-    public void disable2fa(String username) {
+    public void disable2fa(String email) {
         //TODO: implement account disabling 2fa
     }
 

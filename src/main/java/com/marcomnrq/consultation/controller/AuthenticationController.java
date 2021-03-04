@@ -30,11 +30,13 @@ public class AuthenticationController {
         return authenticationService.signIn(loginRequest);
     }
 
+    @PostMapping("/sign-in-2fa")
+    public AuthenticationResource signInWithTotp(@RequestBody TotpSignInResource loginRequest){
+        return authenticationService.signInWithTotp(loginRequest);
+    }
+
     @PostMapping("/refresh-token")
     public AuthenticationResource refreshToken(@Valid @RequestBody RefreshTokenResource refreshTokenRequest){
-        //String email = principal.getName();
-        //refreshTokenRequest.setEmail(email);
-
         return authenticationService.refreshToken(refreshTokenRequest);
     }
 
@@ -67,6 +69,11 @@ public class AuthenticationController {
         String username = principal.getName();
         authenticationService.changePassword(username, changePasswordRequest);
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
+    }
+
+    @PostMapping("/enable-2fa")
+    public String enableTotp(){
+        return authenticationService.enable2fa("manriqueacham@gmail.com");
     }
 
 }

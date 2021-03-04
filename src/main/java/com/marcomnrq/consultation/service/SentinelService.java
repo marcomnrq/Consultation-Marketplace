@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.marcomnrq.consultation.domain.model.Device;
+import com.marcomnrq.consultation.domain.model.NotificationEmail;
 import com.marcomnrq.consultation.domain.model.User;
 import com.marcomnrq.consultation.domain.repository.DeviceRepository;
 import com.marcomnrq.consultation.domain.repository.UserRepository;
@@ -44,6 +45,8 @@ public class SentinelService {
     private final DeviceRepository deviceRepository;
 
     private final UserRepository userRepository;
+
+    private final MailService mailService;
 
     //private final File file = new File("resources/GeoLite2-City.mmdb");
 
@@ -94,6 +97,14 @@ public class SentinelService {
             deviceRepository.save(device);
 
             // TODO: send notification email
+            NotificationEmail notificationEmail = new NotificationEmail();
+            notificationEmail.setRecipient(user.getEmail());
+            notificationEmail.setSubject("Inicio de sesión en dispositivo nuevo");
+            notificationEmail.setFullName(user.getFirstName());
+            notificationEmail.setButtonLink("https://google.com");
+            notificationEmail.setButtonText("Ver ajustes de dispositivos");
+            notificationEmail.setBody("Hemos detectado que has iniciado sesión en un dispositivo nuevo. Si no fuiste tu, es importante tomar acción inmediata. Los detalles del dispositivo: " + deviceDetails);
+            mailService.sendMail(notificationEmail);
         }
     }
     /*
@@ -125,14 +136,13 @@ public class SentinelService {
     /*
         SUSPICIOUS AUTHENTICATION
     */
+    private void checkSuspiciousAuth(User user){
 
-    // TODO: Add suspicious authentication detection
+    }
 
     /*
         UTILITY FUNCTIONS
     */
-
-    // TODO: Add utility functions
     private String getClientIP(HttpServletRequest request) {
         String xfHeader = request.getHeader("X-Forwarded-For");
         if (xfHeader == null){

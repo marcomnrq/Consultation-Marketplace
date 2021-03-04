@@ -56,6 +56,8 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+
+
     public ResponseEntity<?> deleteCategory(Integer id){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(()->new CustomException("Invalid parent"));;
