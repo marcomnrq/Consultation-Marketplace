@@ -24,6 +24,7 @@ public class CategoryService {
             category.setName(resource.getName());
             category.setParent(null);
         } else{
+            // Create child category
             Category parent = categoryRepository.findById(resource.getParentId())
                     .orElseThrow(()->new CustomException("Invalid parent"));
             category.setActive(resource.getActive());
@@ -32,6 +33,7 @@ public class CategoryService {
         }
         return categoryRepository.save(category);
     }
+
     public Category editCategory(Integer id, SaveCategoryResource resource){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(()->new CustomException("Category not found"));
@@ -42,6 +44,7 @@ public class CategoryService {
         category.setParent(parent);
         return categoryRepository.save(category);
     }
+
     public Category editSubCategories(Integer id, List<SaveCategoryResource> list){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(()->new CustomException("Id invalid, category not found"));
@@ -55,8 +58,6 @@ public class CategoryService {
         }
         return categoryRepository.save(category);
     }
-
-
 
     public ResponseEntity<?> deleteCategory(Integer id){
         Category category = categoryRepository.findById(id)

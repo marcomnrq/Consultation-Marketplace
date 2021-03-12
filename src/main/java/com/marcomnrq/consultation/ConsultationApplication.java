@@ -31,6 +31,8 @@ public class ConsultationApplication {
     }
 
     @Bean
-    public Parser parser(){ return new Parser(); }
+    public Parser parser() {
+        return new Parser();
+    }
 
 }

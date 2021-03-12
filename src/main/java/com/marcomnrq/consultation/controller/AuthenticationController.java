@@ -76,4 +76,13 @@ public class AuthenticationController {
         return authenticationService.enable2fa("manriqueacham@gmail.com");
     }
 
+    @GetMapping("testing")
+    public AuthenticationResource testing(){
+        SignInResource loginRequest = new SignInResource();
+        loginRequest.setEmail("manriqueacham@gmail.com");
+        loginRequest.setPassword("Mouliner2!");
+
+        return authenticationService.signIn(loginRequest);
+    }
+
 }

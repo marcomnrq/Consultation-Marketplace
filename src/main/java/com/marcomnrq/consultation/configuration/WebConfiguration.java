@@ -13,7 +13,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:6969")
+                .allowedOrigins("http://localhost:8080")
                 .allowedMethods("*")
                 .maxAge(3600L)
                 .allowedHeaders("*")
@@ -23,6 +23,10 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO: add resource handler
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/resources/");
+
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
 
